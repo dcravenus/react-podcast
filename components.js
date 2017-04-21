@@ -32,4 +32,25 @@ class PodcastsContainer extends React.Component {
   }
 }
 
-module.exports = PodcastsContainer;
+class PodcastTile extends React.Component {
+  render() {
+    return React.createElement('div', {className: "podcast-tile"},
+      React.createElement('img', {src: this.props.children.image})
+    );
+  }
+}
+
+class PodcastTiles extends React.Component {
+  render() {
+    return React.createElement('div', {className: "podcast-tiles"},
+      this.props.podcasts.map(function(podcast, i){
+        return React.createElement(PodcastTile, {key: i}, podcast);
+      })
+    );
+  }
+}
+
+module.exports = {
+  PodcastTiles: PodcastTiles,
+  PodcastsContainer: PodcastsContainer
+};

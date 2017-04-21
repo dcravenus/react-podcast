@@ -6,7 +6,7 @@ const parsePodcast = require('node-podcast-parser');
 const request = require('request');
 const storage = require('electron-json-storage');
 
-const PodcastsContainer = require('./components.js');
+const {PodcastsContainer, PodcastTiles} = require('./components.js');
 
 const podcastURLInput = document.getElementById('podcast-url-input');
 const addPodcastButton = document.getElementById('add-podcast-button');
@@ -15,8 +15,7 @@ window.podcastData = [];
 
 
 addPodcastButton.addEventListener('click', function(){
-  getPodcastDataFromURL(podcastURLInput.value).then((data)=>{
-  });
+  getPodcastDataFromURL(podcastURLInput.value).then(addPodcast);
 });
 
 
@@ -40,23 +39,30 @@ function getPodcastDataFromURL(url) {
   });
 }
 
-function renderPodcastsContainer(){
+function renderPodcastTiles(){
   ReactDOM.render(
-    React.createElement(PodcastsContainer, {podcasts: podcastData}, null),
+    React.createElement(PodcastTiles, {podcasts: podcastData}, null),
     document.getElementById('podcasts-container')
   );
 }
 
-function addPodcast(podcastData) {
+function renderPodcastsContainer(podcasts){
+  ReactDOM.render(
+    React.createElement(PodcastsContainer, {podcasts: podcasts}, null),
+    document.getElementById('podcasts-container')
+  );
+}
+
+function addPodcast(data) {
   podcastData.push(data);
   storage.set('podcastData', podcastData);
-  renderPodcastsContainer();
+  renderPodcastTiles();
 }
 
 function init() {
   storage.get('podcastData', function(err, data){
     podcastData = data;
-    renderPodcastsContainer();
+    renderPodcastTiles();
   });
 }
 
