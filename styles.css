@@ -10,8 +10,26 @@
 .podcast-tile {
   width: 300px;
   margin: 20px;
+  cursor: pointer;
 }
 
 .podcast-tile img {
   width: inherit;
+}
+
+.episode-card {
+  margin-bottom: 20px;
+}
+
+.episode-date {
+  font-style: italic;
+}
+
+.episode-title {
+  font-size: 150%;
+  margin-top: 30px;
+}
+
+body {
+  font-family: sans-serif;
 }

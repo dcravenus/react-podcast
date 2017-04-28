@@ -6,13 +6,13 @@ const parsePodcast = require('node-podcast-parser');
 const request = require('request');
 const storage = require('electron-json-storage');
 
-const {PodcastsContainer, PodcastTiles} = require('./components.js');
+const {PodcastsContainer, PodcastTiles, Main} = require('./dist/components.js');
 
 const podcastURLInput = document.getElementById('podcast-url-input');
 const addPodcastButton = document.getElementById('add-podcast-button');
 
 window.podcastData = [];
-
+window.main;
 
 addPodcastButton.addEventListener('click', function(){
   getPodcastDataFromURL(podcastURLInput.value).then(addPodcast);
@@ -39,16 +39,9 @@ function getPodcastDataFromURL(url) {
   });
 }
 
-function renderPodcastTiles(){
-  ReactDOM.render(
-    React.createElement(PodcastTiles, {podcasts: podcastData}, null),
-    document.getElementById('podcasts-container')
-  );
-}
-
-function renderPodcastsContainer(podcasts){
-  ReactDOM.render(
-    React.createElement(PodcastsContainer, {podcasts: podcasts}, null),
+function renderMain(){
+  return ReactDOM.render(
+    React.createElement(Main, {}, null),
     document.getElementById('podcasts-container')
   );
 }
@@ -56,13 +49,17 @@ function renderPodcastsContainer(podcasts){
 function addPodcast(data) {
   podcastData.push(data);
   storage.set('podcastData', podcastData);
-  renderPodcastTiles();
+  main.setState({
+    podcasts: podcastData,
+    currentPodcast: data
+  });
 }
 
 function init() {
   storage.get('podcastData', function(err, data){
     podcastData = data;
-    renderPodcastTiles();
+    main = renderMain();
+    main.setState({podcasts: podcastData});
   });
 }
 
