@@ -25,6 +25,7 @@ function getPodcastDataFromURL(url) {
           return;
         }
 
+        data.url = url;
         resolve(data);
       });
     });
@@ -44,13 +45,27 @@ function renderMain(){
 }
 
 function addPodcast(data) {
-  podcastData.push(data);
+  var index = podcastData.findIndex((podcast)=>podcast.title === data.title);
+
+  if(~index){
+    podcastData[index] = data;
+  } else {
+    podcastData.push(data);
+  }
+
   storage.set('podcastData', podcastData);
+
   main.setState({
-    podcasts: podcastData,
-    currentPodcast: data,
-    tileView: false
+    podcasts: podcastData
   });
+
+  if(main.state.currentPodcast.title){
+    main.setState({
+      currentPodcast: data,
+      tileView: false
+    });
+  }
+
 }
 
 window.removePodcast = function() {
@@ -66,11 +81,18 @@ window.removePodcast = function() {
   });
 }
 
+window.refreshPodcasts = function() {
+  podcastData.forEach((podcast)=>{
+    getPodcastDataFromURL(podcast.url).then(addPodcast);
+  });
+}
+
 function init() {
   storage.get('podcastData', function(err, data){
     podcastData = data;
     main = renderMain();
     main.setState({podcasts: podcastData});
+    refreshPodcasts();
   });
 }
 
