@@ -1,3 +1,8 @@
+.podcast-card {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
 .podcast-card img {
   max-width: 200px;
 }

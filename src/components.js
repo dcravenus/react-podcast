@@ -13,7 +13,7 @@ class EpisodeDiv extends React.Component {
       <div className="episode-card">
         <div className="episode-title">{this.props.children.title}</div>
         <div className="episode-date">{date}</div>
-        <p>{this.props.children.description}</p>
+        <p dangerouslySetInnerHTML={{__html: this.props.children.description}}></p>
         <audio src={data.enclosure.url} controls="controls"></audio>
       </div>
     );
@@ -21,17 +21,6 @@ class EpisodeDiv extends React.Component {
 }
 
 class PodcastCard extends React.Component {
-  constructor() {
-    super();
-    this.handleBackClick = this.handleBackClick.bind(this);
-  }
-
-  handleBackClick() {
-    main.setState({
-      tileView: true
-    });
-  }
-
   render() {
     if (this.props.hidden) return null;
 
@@ -41,11 +30,8 @@ class PodcastCard extends React.Component {
 
     return (
       <div className="podcast-card">
-        <a href={data.link}>
-          <h1>{data.title}</h1>
-        </a>
+        <h1>{data.title}</h1>
         <div>
-          <button onClick={this.handleBackClick}>Back</button>
           <img src={data.image}/>
           <div className="episodes">
             {
@@ -118,6 +104,31 @@ class PodcastTiles extends React.Component {
   }
 }
 
+class Nav extends React.Component {
+  constructor() {
+    super();
+    this.handleHomeClick = this.handleHomeClick.bind(this);
+  }
+
+  handleHomeClick() {
+    main.setState({
+      currentPodcast: {},
+      tileView: true
+    });
+  }
+
+  render() {
+    return (
+      <div>
+        <button onClick={this.handleHomeClick}>Home</button>
+        <input id="podcast-url-input" type="text"/>
+        <button onClick={getAndAddPodcast}>Add</button>
+        <button onClick={removePodcast}>Remove</button>
+      </div>
+    );
+  }
+}
+
 class Main extends React.Component {
   constructor(){
     super();
@@ -143,6 +154,7 @@ class Main extends React.Component {
   render() {
     return (
       <div>
+        <Nav/>
         <PodcastTiles podcasts={this.state.podcasts} hidden={!this.state.tileView}/>
         <PodcastCard podcast={this.state.currentPodcast} hidden={this.state.tileView}/>
       </div>
@@ -153,5 +165,6 @@ class Main extends React.Component {
 module.exports = {
   PodcastTiles: PodcastTiles,
   PodcastsContainer: PodcastsContainer,
+  Nav: Nav,
   Main: Main
 };

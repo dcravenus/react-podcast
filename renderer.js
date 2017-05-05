@@ -6,18 +6,10 @@ const parsePodcast = require('node-podcast-parser');
 const request = require('request');
 const storage = require('electron-json-storage');
 
-const {PodcastsContainer, PodcastTiles, Main} = require('./dist/components.js');
-
-const podcastURLInput = document.getElementById('podcast-url-input');
-const addPodcastButton = document.getElementById('add-podcast-button');
+const {Main} = require('./dist/components.js');
 
 window.podcastData = [];
 window.main;
-
-addPodcastButton.addEventListener('click', function(){
-  getPodcastDataFromURL(podcastURLInput.value).then(addPodcast);
-});
-
 
 function getPodcastDataFromURL(url) {
   return new Promise((resolve, reject)=>{
@@ -39,6 +31,11 @@ function getPodcastDataFromURL(url) {
   });
 }
 
+window.getAndAddPodcast = function() {
+  var podcastURLInput = document.getElementById('podcast-url-input');
+  getPodcastDataFromURL(podcastURLInput.value).then(addPodcast);
+};
+
 function renderMain(){
   return ReactDOM.render(
     React.createElement(Main, {}, null),
@@ -51,7 +48,21 @@ function addPodcast(data) {
   storage.set('podcastData', podcastData);
   main.setState({
     podcasts: podcastData,
-    currentPodcast: data
+    currentPodcast: data,
+    tileView: false
+  });
+}
+
+window.removePodcast = function() {
+  var title = main.state.currentPodcast.title;
+  var index = podcastData.findIndex((podcast)=>podcast.title === title);
+  if(!~index) return;
+  podcastData.splice(index, 1);
+  storage.set('podcastData', podcastData);
+  main.setState({
+    podcasts: podcastData,
+    currentPodcast: {},
+    tileView: true
   });
 }
 
