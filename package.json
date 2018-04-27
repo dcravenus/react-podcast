@@ -18,13 +18,13 @@
   "author": "GitHub",
   "license": "CC0-1.0",
   "dependencies": {
+    "electron": "^1.8.6",
     "electron-json-storage": "^4.1.0",
     "node-podcast-parser": "^2.1.0",
     "request": "^2.85.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
-    "babel-preset-react": "^6.24.1",
-    "electron": "^1.8.4"
+    "babel-preset-react": "^6.24.1"
   }
 }

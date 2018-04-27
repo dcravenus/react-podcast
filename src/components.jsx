@@ -123,7 +123,7 @@ class Nav extends React.Component {
         <button onClick={this.handleHomeClick}>Home</button>
         <input id="podcast-url-input" type="text"/>
         <button onClick={getAndAddPodcast}>Add</button>
-        <button onClick={removePodcast}>Remove</button>
+        <button onClick={removePodcast} hidden={this.props.isTileView}>Remove</button>
       </div>
     );
   }
@@ -154,7 +154,7 @@ class Main extends React.Component {
   render() {
     return (
       <div>
-        <Nav/>
+        <Nav isTileView={this.state.tileView}/>
         <PodcastTiles podcasts={this.state.podcasts} hidden={!this.state.tileView}/>
         <PodcastCard podcast={this.state.currentPodcast} hidden={this.state.tileView}/>
       </div>
