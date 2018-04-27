@@ -90,6 +90,7 @@ window.refreshPodcasts = function() {
 function init() {
   storage.get('podcastData', function(err, data){
     podcastData = data;
+    if(!Array.isArray(podcastData)) podcastData = [];
     main = renderMain();
     main.setState({podcasts: podcastData});
     refreshPodcasts();
